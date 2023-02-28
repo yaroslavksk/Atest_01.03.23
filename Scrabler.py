@@ -31,7 +31,7 @@ def DownloadNotes():
         return False
 
 def NewScrab(Title,Body):
-    #try:
+    try:
         if (findNotes == False):
             f = open("Notes.json", "w+")
             RedactedData = {'id': count+1, 'Title': Title,'Body':Body,'DateTime':NowDateTime}
@@ -46,7 +46,7 @@ def NewScrab(Title,Body):
             f.write(a + '\n')
             f.close()
             return True
-    #except:
+    except:
         print("Ошибка записи проверьте запись!")
 
 def LastScrab():
@@ -57,3 +57,11 @@ def RedScrab(id,Title,Body):
     RedactedData = {'id': id, 'Title': Title,'Body':Body,'DateTime':NowDateTime}
     a ='' + json.dumps(RedactedData,separators=('; ',': '))
     print(a)
+
+def AllScrab():
+    if (findNotes() == True):
+        with open("Notes.json", 'r', encoding='UTF-8') as file:
+            while (line := file.readline().rstrip()):
+                print(line)
+        file.close()
+    return True
