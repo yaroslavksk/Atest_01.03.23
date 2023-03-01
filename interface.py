@@ -6,7 +6,7 @@ def inData(command):
         command = int (command)
         match command:
             case 1:
-                print("Добро пожаловать в меню записей")
+                print("Вы создаёте новую запись")
 
                 print("Введите заголовок")
                 title = str(input())
@@ -19,10 +19,8 @@ def inData(command):
                 inData(input())
 
             case 2: 
-                print("Добро пожаловать в меню редактирования")
-                #id = int (input())
-                MainMenuMessage()
-                inData(input())
+                a = int(input())
+                RedNote(a)
 
             case 3:
                 print("Загрузка последней записи...")
@@ -56,4 +54,34 @@ def NewNotes(title,body):
     if (Scrabler.NewScrab(title,body)): return True
 
 def RedNote():
-    return
+
+    print ("Вы в меню редактирования: \n 1 - Изменить запись \n 2 - Удалить запись\n 3 - Назад \n")
+    #try:
+    comm = int(input())
+    match comm:
+        case 1:
+
+            print("Введите новый заголовок")
+            id = str(input())
+            print("Введите новый заголовок")
+            title = str(input())
+            print("Введите новую заметку")
+            body = str(input())
+
+            if (Scrabler.RedScrab(id,title,body) == True): print("Запись успешна!")
+        case 2:
+            print('Введите ID записи')
+            id = int(input())
+            Scrabler.DeleteScrab(id)
+            RedNote()
+        case 3:
+            #MainMenuMessage()
+            #inData(input())
+            return
+        case _:
+            print("Команда не опознана введите команду")
+            RedNote()
+    #except: 
+        #print ("\n Ошибка! Введите команду")
+        #MainMenuMessage()
+        #inData(input())

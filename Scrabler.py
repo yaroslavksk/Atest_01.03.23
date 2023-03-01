@@ -27,12 +27,14 @@ def DownloadNotes():
             print(f'Заметки загружены! \n Количество: {count}')
             return True
     except:
-        print("Ошибка загрузки проверьте файл!")
+        print("Ошибка загрузки")
         return False
 
 def NewScrab(Title,Body):
     try:
+        
         if (findNotes == False):
+            DownloadNotes()
             f = open("Notes.json", "w+")
             RedactedData = {'id': count+1, 'Title': Title,'Body':Body,'DateTime':NowDateTime}
             a ='' + json.dumps(RedactedData,separators=('; ',': '))
@@ -40,6 +42,7 @@ def NewScrab(Title,Body):
             f.close()
             return True
         else:
+            DownloadNotes()
             f = open("Notes.json", "a")
             RedactedData = {'id': count+1, 'Title': Title,'Body':Body,'DateTime':NowDateTime}
             a ='' + json.dumps(RedactedData,separators=('; ',': '))
@@ -54,9 +57,28 @@ def LastScrab():
         return  print ('\n' + DownloadedNotes[len(DownloadedNotes)-1] + '\n')
     
 def RedScrab(id,Title,Body):
-    RedactedData = {'id': id, 'Title': Title,'Body':Body,'DateTime':NowDateTime}
-    a ='' + json.dumps(RedactedData,separators=('; ',': '))
-    print(a)
+    with open('Notes.json','r',encoding='utf-8') as file:
+        data = file.readlines()
+        if ( (id > len(data)+1) or (id <= 0) ): return
+        else:
+            RedactedData = {'id': id+1, 'Title': Title,'Body':Body,'DateTime':NowDateTime}
+            data[id-1] = '' + json.dumps(RedactedData,separators=('; ',': '))+'\n'
+
+    with open('Notes.json', 'w', encoding='utf-8') as file:
+        file.writelines(data)
+    return True
+
+def DeleteScrab(id):
+
+    with open('Notes.json','r',encoding='utf-8') as file:
+        data = file.readlines()
+        if ( (id > len(data)+1) or (id <= 0) ): return
+        else:
+            data[id-1] = "{NULL}\n"
+
+    with open('Notes.json', 'w', encoding='utf-8') as file:
+        file.writelines(data)
+    return True
 
 def AllScrab():
     if (findNotes() == True):
