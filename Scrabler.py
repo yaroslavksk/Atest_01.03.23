@@ -1,6 +1,7 @@
 import datetime
 import glob
 import json
+import os
 
 DownloadedNotes = []
 NowDateTime = datetime.datetime.now()
@@ -16,9 +17,10 @@ def findNotes():
 def DownloadNotes():
     try:
         global count
+        count = 0
         print("Заметки загружаются...")
         if (findNotes() == True):
-            with open('Notes.json') as file:
+            with open("Notes.json") as file:
                 for line in file:
                     a = line  
                     DownloadedNotes.append(a)
@@ -34,18 +36,19 @@ def NewScrab(Title,Body):
     try:
         
         if (findNotes == False):
-            DownloadNotes()
-            f = open("Notes.json", "w+")
-            RedactedData = {'id': count+1, 'Title': Title,'Body':Body,'DateTime':NowDateTime}
-            a ='' + json.dumps(RedactedData,separators=('; ',': '))
+            f = open("Notes.json", "w+", encoding='utf-8')
+            RedactedData = {'id': count, 'Title': Title,'Body':Body,'DateTime':NowDateTime}
+            a ='' +json.dumps(RedactedData,separators=('; ',': '))
+            print(a)
             f.write(a +'\n')
             f.close()
             return True
         else:
             DownloadNotes()
-            f = open("Notes.json", "a")
+            f = open("Notes.json", "a", encoding='utf-8')
             RedactedData = {'id': count+1, 'Title': Title,'Body':Body,'DateTime':NowDateTime}
-            a ='' + json.dumps(RedactedData,separators=('; ',': '))
+            a =''+ json.dumps(RedactedData,separators=('; ',': '))
+            f.seek(0, os.SEEK_END)
             f.write(a + '\n')
             f.close()
             return True
@@ -61,7 +64,7 @@ def RedScrab(id,Title,Body):
         data = file.readlines()
         if ( (id > len(data)+1) or (id <= 0) ): return
         else:
-            RedactedData = {'id': id+1, 'Title': Title,'Body':Body,'DateTime':NowDateTime}
+            RedactedData = {"id": id, "Title": Title,"Body":Body,"DateTime":NowDateTime}
             data[id-1] = '' + json.dumps(RedactedData,separators=('; ',': '))+'\n'
 
     with open('Notes.json', 'w', encoding='utf-8') as file:
